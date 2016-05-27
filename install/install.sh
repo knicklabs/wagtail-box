@@ -1,8 +1,10 @@
+#!/usr/bin/env bash
+
 # Update APT database
 sudo apt-get update -y
 
 # Useful tools
-sudo apt-get install -y vim git curl gettext build-essential
+sudo apt-get install -y vim git curl gettext build-essential unzip
 
 # Dependencies for PIL
 sudo apt-get install -y libjpeg-dev libtiff-dev zlib1g-dev libfreetype6-dev liblcms2-dev
@@ -15,14 +17,17 @@ sudo apt-get install -y postgresql libpq-dev
 
 # Create vagrant pgsql superuser
 sudo -u postgres createuser --superuser vagrant
+sudo -u postgres psql -c "ALTER USER vagrant WITH PASSWORD 'vagrant';"
 
 # Java for Elasticsearch
-sudo apt install -y openjdk-7-jre openjdk-7-jdk
+sudo apt install -y openjdk-7-jre-headless
 
 # Elasticsearch
-wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.3.3.deb
-sudo dpkg -i elasticsearch-2.3.3.deb
-sudo update-rc.d elasticsearch defaults
+wget -q https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.1.deb
+dpkg -i elasticsearch-1.7.1.deb
+systemctl enable elasticsearch
+systemctl start elasticsearch
+rm elasticsearch-1.7.1.deb
 
 # Python 2.7
 sudo apt-get install -y python python-dev
